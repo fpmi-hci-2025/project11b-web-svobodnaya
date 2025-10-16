@@ -1,9 +1,7 @@
 <template>
   <div class="container">
     <h1>{{ message }}</h1>
-    <p class="subtitle">
-      Vue.js Demo Application
-    </p>
+    <p class="subtitle">Vue.js Demo Application</p>
   </div>
 </template>
 

@@ -61,21 +61,28 @@ jobs:
       
       - name: Integration test - Check index.html
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
-          if [ $response -eq 200 ]; then
+            response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
+            if [ $response -eq 200 ]; then
             echo "✓ Page accessible (HTTP 200)"
-          else
+            else
             echo "✗ Page returned status code: $response"
             exit 1
-          fi
-          
-          content=$(curl -s http://localhost:8080/)
-          if echo "$content" | grep -q "Hello, world!"; then
-            echo "✓ Content contains 'Hello, world!'"
-          else
-            echo "✗ Content does not contain expected text"
+            fi
+            
+            content=$(curl -s http://localhost:8080/)
+            if echo "$content" | grep -q '<div id="app">'; then
+            echo "✓ Vue app container found"
+            else
+            echo "✗ Vue app container not found"
             exit 1
-          fi
+            fi
+            
+            if echo "$content" | grep -q '/src/main.js'; then
+            echo "✓ Vue entry point script found"
+            else
+            echo "✗ Vue entry point not found"
+            exit 1
+            fi
       
       - name: Stop container
         if: always()

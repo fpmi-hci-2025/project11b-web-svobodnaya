@@ -22,4 +22,5 @@ ENV BACKEND_URL=http://backend:8000
 EXPOSE 80
 
 # Replace placeholders with env vars at startup
-CMD ["/bin/sh", "-c", "sed -e \"s|__PORT__|${PORT}|g\" -e \"s|__BACKEND_URL__|${BACKEND_URL}|g\" /etc/nginx/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+# Extract host from BACKEND_URL (e.g., https://example.com -> example.com)
+CMD ["/bin/sh", "-c", "BACKEND_HOST=$(echo $BACKEND_URL | sed -e 's|https://||' -e 's|http://||' -e 's|/.*||') && sed -e \"s|__PORT__|${PORT}|g\" -e \"s|__BACKEND_URL__|${BACKEND_URL}|g\" -e \"s|__BACKEND_HOST__|${BACKEND_HOST}|g\" /etc/nginx/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]

@@ -1,39 +1,27 @@
 <template>
-  <div class="container">
-    <h1>{{ message }}</h1>
-    <p class="subtitle">Vue.js Demo Application</p>
+  <div class="app">
+    <AppHeader v-if="authStore.isAuthenticated" />
+    <main class="main-content">
+      <router-view />
+    </main>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'App',
-  data() {
-    return {
-      message: 'Hello, world!'
-    }
-  }
-}
+<script setup>
+import { useAuthStore } from '@/stores/auth'
+import AppHeader from '@/components/AppHeader.vue'
+
+const authStore = useAuthStore()
 </script>
 
 <style scoped>
-.container {
+.app {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  text-align: center;
 }
 
-h1 {
-  font-size: 3rem;
-  color: #42b883;
-  margin-bottom: 1rem;
-}
-
-.subtitle {
-  font-size: 1.2rem;
-  color: #666;
+.main-content {
+  flex: 1;
 }
 </style>
